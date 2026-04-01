@@ -9,7 +9,7 @@
 Tablero* tablero_crear(int ancho, int alto){
     Tablero *new_tablero = (Tablero*)malloc(sizeof(Tablero));
     if (new_tablero == NULL){
-        printf("error al crear el tablero xdxdxdxd jajajaja");
+        printf("error al crear el tablero xdxdxdxd jajajaja big guy big guy big guy");
     }
     new_tablero->W = ancho;
     new_tablero->H = alto;
