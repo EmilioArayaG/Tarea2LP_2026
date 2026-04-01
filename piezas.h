@@ -14,7 +14,7 @@ typedef struct {
     Pieza *pieza;
 } Celda;
 
-void spawn_nivel(struct Juego *juego, int nivel);
+void spawn_nivel(struct Juego juego, int nivel);
 void mover_enemigos(struct Juego *juego);
 bool verificar_estado_rey(struct Juego *juego);
 

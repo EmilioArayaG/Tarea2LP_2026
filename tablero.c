@@ -28,8 +28,8 @@ Tablero* tablero_crear(int ancho, int alto){
 }
 
 void tablero_liberar(Tablero *tablero){
-    for(int y=0; y<tablero->W; y++){
-        for(int x=0; x<tablero->H; x++){
+    for(int y=0; y<tablero->H; y++){
+        for(int x=0; x<tablero->W; x++){
             Celda *celda_actual = (Celda*)tablero->celdas[y][x];
             free(celda_actual);
         }
@@ -39,7 +39,7 @@ void tablero_liberar(Tablero *tablero){
     free(tablero->celdas);
 }
 
-void tablero_imprimir(Juego *juego){
+void tablero_imprimir(struct Juego *juego){
     Tablero *tablero = juego->t;
     printf("\n--- Tablero (%dx%d) ---\n", tablero->W, tablero->H);
     for(int y = 0; y < tablero->H; y++){

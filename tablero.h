@@ -9,9 +9,9 @@ typedef struct {
 
 } Tablero;
 
-struct Tablero* tablero_crear(int ancho, int alto);
+Tablero* tablero_crear(int ancho, int alto);
 void tablero_imprimir(struct Juego *juego);
-void tablero_liberar(struct Tablero *tablero);
+void tablero_liberar(Tablero *tablero);
 
 #endif
 
