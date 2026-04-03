@@ -13,7 +13,7 @@ typedef struct {
     FuncArma disparar[4];
 } Armas;
 
-bool escopeta(struct Juego juego, int dir_x, int dir_y);
+bool escopeta(struct Juego *juego, int dir_x, int dir_y);
 bool francotirador(struct Juego *juego, int dir_x, int dir_y);
 bool granada(struct Juego *juego, int dir_x, int dir_y);
 bool especial(struct Juego *juego, int dir_x, int dir_y);

@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <time.h>
 #include "main.h"
 
 int main() {
+    srand(time(NULL));
+
     Juego juego;
     juego.nivel_actual = 1;
     
@@ -11,17 +14,55 @@ int main() {
     juego.t = tablero_crear(12, 12);
     spawn_nivel(&juego, juego.nivel_actual);
 
+    juego.arsenal.disparar[0] = escopeta;
+    juego.arsenal.disparar[1] = francotirador;
+    juego.arsenal.disparar[2] = granada;
+    juego.arsenal.disparar[3] = especial;
+
+    juego.arsenal.municion_maxima[0] = 2;
+    juego.arsenal.municion_actual[0] = 2; 
+
     bool jugando = true;
     char input; 
     
     while (jugando) {
         tablero_imprimir(&juego);
-        printf("\nIngresa tu movimiento (Q,W,E,A,S,D,Z,C) X PARA SALIR: ");
+        printf("\nIngresa tu movimiento (Q,W,E,A,S,D,Z,C) | Disparar (1,2,3,4) | X PARA SALIR: ");
         scanf(" %c", &input);
         
         if (input == 'X' || input == 'x'){
             jugando = false;
             break;
+        }
+        
+        if (input >= '1' && input <= '4'){
+            int in_arma = input - '1';
+            if (juego.arsenal.municion_actual[in_arma] > 0){
+                printf("Ingresa direccion de disparo (Q,W,E,A,S,D,Z,C): ");
+                char dir_input;
+                scanf(" %c", &dir_input); 
+                
+                int direc_x = 0, direc_y = 0;
+                switch(dir_input){
+                    case 'W': case 'w': direc_y = -1; break;
+                    case 'A': case 'a': direc_x = -1; break;
+                    case 'S': case 's': direc_y = 1; break;
+                    case 'D': case 'd': direc_x = 1; break;
+                    case 'Q': case 'q': direc_x = -1; direc_y = -1; break;
+                    case 'E': case 'e': direc_x = 1; direc_y = -1; break;
+                    case 'Z': case 'z': direc_x = -1; direc_y = 1; break;
+                    case 'C': case 'c': direc_x = 1; direc_y = 1; break;
+                    default: 
+                        printf("Direccion invalida. \n");
+                        continue;
+                }
+                juego.arsenal.disparar[in_arma](&juego, direc_x, direc_y);
+                juego.arsenal.municion_actual[in_arma]--;
+                continue;
+            } else {
+                printf("No hay municion de este arma....\n");
+                continue;
+            }
         }
         
         int dir_x = 0, dir_y = 0;
@@ -56,7 +97,6 @@ int main() {
     }
 
     tablero_liberar(juego.t);
-
     free(juego.t);
 
     return 0;
