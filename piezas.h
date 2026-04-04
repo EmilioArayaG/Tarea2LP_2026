@@ -8,6 +8,7 @@ typedef struct {
     char tipo;
     int hp;
     int x, y;
+    bool desplz;
 } Pieza;
 
 typedef struct {

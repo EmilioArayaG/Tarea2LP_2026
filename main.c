@@ -20,7 +20,13 @@ int main() {
     juego.arsenal.disparar[3] = especial;
 
     juego.arsenal.municion_maxima[0] = 2;
-    juego.arsenal.municion_actual[0] = 2; 
+    juego.arsenal.municion_actual[0] = 2;
+    juego.arsenal.municion_maxima[1] = 1;
+    juego.arsenal.municion_actual[1] = 1;
+    juego.arsenal.municion_maxima[2] = 2;
+    juego.arsenal.municion_actual[2] = 2;
+    juego.arsenal.municion_maxima[3] = 3;
+    juego.arsenal.municion_actual[3] = 3; 
 
     bool jugando = true;
     char input; 
@@ -53,14 +59,12 @@ int main() {
                     case 'Z': case 'z': direc_x = -1; direc_y = 1; break;
                     case 'C': case 'c': direc_x = 1; direc_y = 1; break;
                     default: 
-                        printf("Direccion invalida. \n");
                         continue;
                 }
                 juego.arsenal.disparar[in_arma](&juego, direc_x, direc_y);
                 juego.arsenal.municion_actual[in_arma]--;
                 continue;
             } else {
-                printf("No hay municion de este arma....\n");
                 continue;
             }
         }
@@ -77,7 +81,6 @@ int main() {
             case 'Z': case 'z': dir_x = -1; dir_y = 1; break;
             case 'C': case 'c': dir_x = 1; dir_y = 1; break;
             default: 
-                printf("Movimiento invalido. \n");
                 continue;
         }
         
