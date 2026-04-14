@@ -8,7 +8,7 @@
 typedef struct Juego {
     Tablero *t;
     Armas arsenal;
-    Pieza jugador;
+    Pieza *jugador;
     int nivel_actual;
     int turno_enemigos;
 } Juego;
