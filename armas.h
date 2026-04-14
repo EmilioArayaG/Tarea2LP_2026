@@ -5,7 +5,7 @@
 
 struct Juego;
 
-typedef bool (*FuncArma)(struct Juego *juego, int dir_x, int dir_y);
+typedef bool (*FuncArma)(struct Juego *j, int dir_x, int dir_y);
 
 typedef struct {
     int municion_actual[4];
@@ -13,8 +13,8 @@ typedef struct {
     FuncArma disparar[4];
 } Armas;
 
-bool escopeta(struct Juego *juego, int dir_x, int dir_y);
-bool francotirador(struct Juego *juego, int dir_x, int dir_y);
-bool granada(struct Juego *juego, int dir_x, int dir_y);
-bool especial(struct Juego *juego, int dir_x, int dir_y);
+bool escopeta(struct Juego *j, int dir_x, int dir_y);
+bool francotirador(struct Juego *j, int dir_x, int dir_y);
+bool granada(struct Juego *j, int dir_x, int dir_y);
+bool especial(struct Juego *j, int dir_x, int dir_y);
 #endif
