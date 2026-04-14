@@ -1,36 +1,32 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include "main.h"
 #include "armas.h"
 
-bool escopeta(struct Juego *juego, int dir_x, int dir_y){
-
-    int obj_x = juego->jugador.x + dir_x;
-    int obj_y = juego->jugador.y + dir_y;
-
-    printf("\nEscopeta disparada!...\n");
-
-    if (obj_x >= 0 && obj_x < juego->t->W && obj_y >= 0 && obj_y < juego->t->H){
-        Celda *c = (Celda *)juego->t->celdas[obj_y][obj_x];
-        if (c->pieza != NULL && c->pieza->tipo != 'K'){
+bool escopeta(struct Juego j, int dx, int dy) {
+    Pieza *rey = NULL;
+    for(int y=0; y<j.t->H; y++) {
+        for(int x=0; x<j.t->W; x++) {
+            Celda *c = (Celda*)j.t->celdas[y][x];
+            if(c->pieza && c->pieza->tipo == 'R') { rey = c->pieza; break; }
+        }
+    }
+    if(!rey) return false;
+    int tx = rey->x + dx, ty = rey->y + dy;
+    if(tx>=0 && tx<j.t->W && ty>=0 && ty<j.t->H) {
+        Celda *c = (Celda*)j.t->celdas[ty][tx];
+        if(c->pieza && c->pieza->tipo != 'R') {
             c->pieza->hp -= 2;
-            if(c->pieza->hp <= 0){
-                printf("El %c ha sido derrotado.\n", c->pieza->tipo);
-                free(c->pieza);
-                c->pieza = NULL;
-            }
-        
+            if(c->pieza->hp <= 0) { free(c->pieza); c->pieza = NULL; }
             return true;
         }
     }
-    printf("El disparo no le dio a ningun objetivo.....\n");
-    return false;
+    return true;
 }
-bool francotirador(struct Juego *juego, int dir_x, int dir_y) { 
-    printf("Sniper aún no implementado.\n"); return false; 
-}
-bool granada(struct Juego *juego, int dir_x, int dir_y) { 
+
+bool francotirador(struct Juego *j, int dx, int dy) { return false; }
+bool granada(struct Juego *j, int tx, int ty) { return false; }
+bool especial(struct Juego *j, int dx, int dy) { return false; }
     printf("Granada aún no implementada.\n"); return false; 
 }
 bool especial(struct Juego *juego, int dir_x, int dir_y) { 
