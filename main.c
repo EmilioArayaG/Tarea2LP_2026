@@ -6,13 +6,11 @@
 
 int main() {
     srand(time(NULL));
-
     Juego juego;
     juego.nivel_actual = 1;
     
-    printf("Iniciando Rey - Nivel %d...\n", juego.nivel_actual);
     juego.t = tablero_crear(12, 12);
-    spawn_nivel(&juego, juego.nivel_actual);
+    spawn_nivel(juego, juego.nivel_actual);
 
     juego.arsenal.disparar[0] = escopeta;
     juego.arsenal.disparar[1] = francotirador;
@@ -20,18 +18,13 @@ int main() {
     juego.arsenal.disparar[3] = especial;
 
     juego.arsenal.municion_maxima[0] = 2;
-    juego.arsenal.municion_actual[0] = 2;
-    juego.arsenal.municion_maxima[1] = 1;
-    juego.arsenal.municion_actual[1] = 1;
-    juego.arsenal.municion_maxima[2] = 2;
-    juego.arsenal.municion_actual[2] = 2;
-    juego.arsenal.municion_maxima[3] = 3;
-    juego.arsenal.municion_actual[3] = 3; 
+    juego.arsenal.municion_actual[0] = 2; 
 
     bool jugando = true;
     char input; 
     
     while (jugando) {
+        system("clear");
         tablero_imprimir(&juego);
         printf("\nIngresa tu movimiento (Q,W,E,A,S,D,Z,C) | Disparar (1,2,3,4) | X PARA SALIR: ");
         scanf(" %c", &input);
@@ -61,8 +54,9 @@ int main() {
                     default: 
                         continue;
                 }
-                juego.arsenal.disparar[in_arma](&juego, direc_x, direc_y);
+                juego.arsenal.disparar[in_arma](juego, direc_x, direc_y);
                 juego.arsenal.municion_actual[in_arma]--;
+                mover_enemigos(juego);
                 continue;
             } else {
                 continue;
@@ -84,22 +78,43 @@ int main() {
                 continue;
         }
         
-        int new_x = juego.jugador.x + dir_x;
-        int new_y = juego.jugador.y + dir_y;
-        
-        if (new_x >= 0 && new_x < juego.t->W && new_y >= 0 && new_y < juego.t->H){
-            Celda *celda_vieja = (Celda*)juego.t->celdas[juego.jugador.y][juego.jugador.x];
-            celda_vieja->pieza = NULL;
-            juego.jugador.x = new_x;
-            juego.jugador.y = new_y;
-            Celda *celda_nueva = (Celda*)juego.t->celdas[new_y][new_x];
-            celda_nueva->pieza = &(juego.jugador);
-        } else {
-            printf("Movimiento invalido. \n");
+        Pieza *rey = NULL;
+        for(int y = 0; y < juego.t->H; y++) {
+            for(int x = 0; x < juego.t->W; x++) {
+                Celda *c = (Celda*)juego.t->celdas[y][x];
+                if(c->pieza != NULL && c->pieza->tipo == 'R') { 
+                    rey = c->pieza; 
+                    break; 
+                }
+            }
+            if(rey != NULL) break;
+        }
+
+        if (rey != NULL) {
+            int new_x = rey->x + dir_x;
+            int new_y = rey->y + dir_y;
+            
+            if (new_x >= 0 && new_x < juego.t->W && new_y >= 0 && new_y < juego.t->H){
+                Celda *celda_vieja = (Celda*)juego.t->celdas[rey->y][rey->x];
+                Celda *celda_nueva = (Celda*)juego.t->celdas[new_y][new_x];
+                
+                if (celda_nueva->pieza == NULL) {
+                    celda_vieja->pieza = NULL;
+                    rey->x = new_x;
+                    rey->y = new_y;
+                    celda_nueva->pieza = rey;
+                    
+                    if (juego.arsenal.municion_actual[0] < juego.arsenal.municion_maxima[0]) {
+                        juego.arsenal.municion_actual[0]++;
+                    }
+                    
+                    mover_enemigos(juego);
+                }
+            }
         }
     }
 
-    tablero_liberar(juego.t);
+    tablero_liberar(*(juego.t));
     free(juego.t);
 
     return 0;
